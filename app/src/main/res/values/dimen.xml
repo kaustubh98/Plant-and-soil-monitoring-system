@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="formVaueTopPadding">16dp</dimen>
+    <dimen name="padding_element">16dp</dimen>
+    <dimen name="padding_layout">16dp</dimen>
+</resources>
