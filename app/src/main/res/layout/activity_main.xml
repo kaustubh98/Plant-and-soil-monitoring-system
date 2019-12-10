@@ -79,6 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="paramsMoist"
                 android:text="Soil Moisture" />
 
             <TextView
@@ -86,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="30%" />
+                android:text="" />
 
         </TableRow>
 
@@ -101,6 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="paramsTemp"
                 android:text="Temperature" />
 
             <TextView
@@ -108,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="35" />
+                android:text="" />
         </TableRow>
 
         <TableRow
@@ -122,6 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="paramsLight"
                 android:text="Light Intensity" />
 
             <TextView
@@ -129,7 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="40" />
+                android:text="" />
         </TableRow>
 
         <TableRow
@@ -143,6 +146,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="paramsHumid"
                 android:text="Humidity" />
 
             <TextView
@@ -150,7 +154,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="37" />
+                android:text="" />
 
         </TableRow>
     </TableLayout>
