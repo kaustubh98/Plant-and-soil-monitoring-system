@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.plantmonitoringsystem.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +20,7 @@ public class ParameterListAdapter extends ArrayAdapter {
     int count ;
 
     //constructor for calling the class
-    public ParameterListAdapter(@NonNull Context context, ArrayList parameterList) {
+    public ParameterListAdapter(@NonNull Context context, ArrayList<String> parameterList) {
         super(context,0, parameterList);
         count = 1;
     }
@@ -37,8 +38,8 @@ public class ParameterListAdapter extends ArrayAdapter {
 
         TextView textView = listView.findViewById(R.id.value);
         TextView timeView = listView.findViewById(R.id.time);
-        int parameter = (int) getItem(position);
-        textView.setText(String.valueOf(parameter));
+        String parameter = (String) getItem(position);
+        textView.setText(parameter);
         String time = "Before "+count+ " hours";
         count = count + 1;
         timeView.setText(time);

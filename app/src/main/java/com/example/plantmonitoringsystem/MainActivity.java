@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,21 +25,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseUser user;
     private DatabaseReference reference;
-    String moistureLevel,Humidity,Temperature,Light;
     private TableLayout tableLayout;
     private ConstraintLayout nullView;
     TextView moisture,humidity,temp,light;
     ProgressDialog progressDialog;
-    ArrayList<Integer> TemperatureList = new ArrayList<Integer>();
-    ArrayList<Integer> HumidityList = new ArrayList<Integer>();
-    ArrayList<Integer> MoistureList = new ArrayList<Integer>();
-    ArrayList<Integer> LightList = new ArrayList<Integer>();
+    ArrayList<String> TemperatureList = new ArrayList<String>();
+    ArrayList<String> HumidityList = new ArrayList<String>();
+    ArrayList<String> MoistureList = new ArrayList<String>();
+    ArrayList<String> LightList = new ArrayList<String>();
+    DecimalFormat Format = new DecimalFormat("0.0");
+    ArrayList<Integer> countT,countH,countM,countL = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         HumidityList.clear();
         MoistureList.clear();
         LightList.clear();
+        countT.clear();
         Log.e("PopulateView","Populating View");
 
 //        //temperature
@@ -267,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void ListenForParameter(String parameter, final TextView textView, final ArrayList<Integer> dataList) {
+    private void ListenForParameter(String parameter, final TextView textView, final ArrayList<String> dataList) {
 
         dataList.clear();
         Log.e("PopulateView","Listening for "+parameter );
@@ -278,7 +280,8 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 try{
                     Log.e("Message",dataSnapshot.getValue().toString());
-                    int temporary = dataSnapshot.getValue(Integer.class);
+                    float t = dataSnapshot.getValue(Float.class);
+                    String temporary = Format.format(t);
                     dataList.add(0,temporary);
                     textView.setText(String.valueOf(dataList.get(0)));
                     Log.v("Adding Temperature","Added Temperature is: "+textView.getText());
@@ -369,6 +372,7 @@ public class MainActivity extends AppCompatActivity {
     //show humidity details
     public void paramsHumid(View view){
         HumidityList.remove(0);
+        Log.e("Transferring data","The size is: "+HumidityList.size());
         Intent i = new Intent(this,ParameterList.class);
         i.putExtra("Parameter","Humidity");
         i.putExtra("DataList", HumidityList);
