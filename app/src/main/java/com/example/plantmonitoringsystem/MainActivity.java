@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         LightList.clear();
         Log.e("PopulateView","Populating View");
 
-        //temperature
+//        //temperature
 //        reference.child("Temperature").addChildEventListener(new ChildEventListener() {
 //            @Override
 //            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 //
-////        //humidity
+//        //humidity
 //        reference.child("Humidity").addChildEventListener(new ChildEventListener() {
 //            @Override
 //            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -280,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
                     int temporary = dataSnapshot.getValue(Integer.class);
                     dataList.add(0,temporary);
                     textView.setText(String.valueOf(dataList.get(0)));
-                    Log.e("Adding Temperature","Added Temperature is: "+textView.getText());
+                    Log.v("Adding Temperature","Added Temperature is: "+textView.getText());
 
                 }catch(Exception e){
                     e.printStackTrace();
@@ -358,6 +359,7 @@ public class MainActivity extends AppCompatActivity {
 
     //show temperature details
     public void paramsTemp(View view){
+        TemperatureList.remove(0);
         Intent i = new Intent(this,ParameterList.class);
         i.putExtra("Parameter","Temperature");
         i.putExtra("DataList", TemperatureList);
@@ -366,6 +368,7 @@ public class MainActivity extends AppCompatActivity {
 
     //show humidity details
     public void paramsHumid(View view){
+        HumidityList.remove(0);
         Intent i = new Intent(this,ParameterList.class);
         i.putExtra("Parameter","Humidity");
         i.putExtra("DataList", HumidityList);
@@ -374,16 +377,18 @@ public class MainActivity extends AppCompatActivity {
 
     //show temperature details
     public void paramsMoist(View view){
+        MoistureList.remove(0);
         Intent i = new Intent(this,ParameterList.class);
-        i.putExtra("Parameter","Moisture");
+        i.putExtra("Parameter","Soil Moisture Level");
         i.putExtra("DataList", MoistureList);
         startActivity(i);
     }
 
     //show temperature details
     public void paramsLight(View view){
+        LightList.remove(0);
         Intent i = new Intent(this,ParameterList.class);
-        i.putExtra("Parameter","Light");
+        i.putExtra("Parameter","Light Intensity");
         i.putExtra("DataList", LightList);
         startActivity(i);
     }

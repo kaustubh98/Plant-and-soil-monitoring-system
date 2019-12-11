@@ -1,10 +1,14 @@
 package com.example.plantmonitoringsystem;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.plantmonitoringsystem.SupportClasses.ParameterListAdapter;
 
 import java.util.ArrayList;
 
@@ -22,12 +26,25 @@ public class ParameterList extends AppCompatActivity {
         if(extras!=null){
             parameterList = extras.getIntegerArrayList("DataList");
             parameter = extras.getString("Parameter");
-            Toast.makeText(this,parameterList.toString(),Toast.LENGTH_LONG).show();
-        }else {
+
+            try {
+                ActionBar actionBar = getSupportActionBar();
+                actionBar.setTitle(parameter);
+            }catch (NullPointerException ne){
+                ne.printStackTrace();
+            }
+
+            ListView listView = findViewById(R.id.parameterList);
+            ParameterListAdapter adapter = new ParameterListAdapter(this,parameterList);
+            listView.setAdapter(adapter);
+
+            }else {
             Toast.makeText(this,"Could not load the data due to system error",Toast.LENGTH_LONG).show();
             Intent i = new Intent(this,MainActivity.class);
             startActivity(i);
         }
+
+
 
     }
 }
