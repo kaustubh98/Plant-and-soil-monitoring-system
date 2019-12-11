@@ -41,7 +41,10 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> MoistureList = new ArrayList<String>();
     ArrayList<String> LightList = new ArrayList<String>();
     DecimalFormat Format = new DecimalFormat("0.0");
-    ArrayList<Integer> countT,countH,countM,countL = new ArrayList<Integer>();
+    ArrayList<Integer> countT = new ArrayList<Integer>();
+    ArrayList<Integer> countH = new ArrayList<Integer>();
+    ArrayList<Integer> countL = new ArrayList<Integer>();
+    ArrayList<Integer> countM = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,14 @@ public class MainActivity extends AppCompatActivity {
         MoistureList.clear();
         LightList.clear();
         countT.clear();
+        countH.clear();
+        countL.clear();
+        countM.clear();
+
+        countM.add(1);
+        countH.add(1);
+        countL.add(1);
+        countT.add(1);
         Log.e("PopulateView","Populating View");
 
 //        //temperature
@@ -269,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void ListenForParameter(String parameter, final TextView textView, final ArrayList<String> dataList) {
+    private void ListenForParameter(final String parameter, final TextView textView, final ArrayList<String> dataList) {
 
         dataList.clear();
         Log.e("PopulateView","Listening for "+parameter );
@@ -284,6 +295,9 @@ public class MainActivity extends AppCompatActivity {
                     String temporary = Format.format(t);
                     dataList.add(0,temporary);
                     textView.setText(String.valueOf(dataList.get(0)));
+
+                    addCount(parameter);
+
                     Log.v("Adding Temperature","Added Temperature is: "+textView.getText());
 
                 }catch(Exception e){
@@ -314,6 +328,23 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void addCount(String parameter) {
+        switch (parameter){
+            case "Moisture":
+                countM.add(countM.get(countM.size()-1) + 1);
+                break;
+            case "Temperature":
+                countT.add(countT.get(countT.size()-1) + 1);
+                break;
+            case "LightIntensity":
+                countL.add(countL.get(countL.size()-1) + 1);
+                break;
+            case "Humidity":
+                countH.add(countH.get(countH.size()-1) + 1);
+                break;
+        }
     }
 
     //to ensure that user does not come back to main activity without sign in
@@ -363,19 +394,22 @@ public class MainActivity extends AppCompatActivity {
     //show temperature details
     public void paramsTemp(View view){
         TemperatureList.remove(0);
+        Log.e("Count", "MainActivity_Temp: "+countT.size() );
         Intent i = new Intent(this,ParameterList.class);
         i.putExtra("Parameter","Temperature");
         i.putExtra("DataList", TemperatureList);
+        i.putExtra("count",countT);
         startActivity(i);
     }
 
     //show humidity details
     public void paramsHumid(View view){
         HumidityList.remove(0);
-        Log.e("Transferring data","The size is: "+HumidityList.size());
+        //Log.e("Transferring data","The size is: "+HumidityList.size());
         Intent i = new Intent(this,ParameterList.class);
         i.putExtra("Parameter","Humidity");
         i.putExtra("DataList", HumidityList);
+        i.putExtra("count",countH);
         startActivity(i);
     }
 
@@ -385,6 +419,7 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this,ParameterList.class);
         i.putExtra("Parameter","Soil Moisture Level");
         i.putExtra("DataList", MoistureList);
+        i.putExtra("count",countM);
         startActivity(i);
     }
 
@@ -394,6 +429,7 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this,ParameterList.class);
         i.putExtra("Parameter","Light Intensity");
         i.putExtra("DataList", LightList);
+        i.putExtra("count",countL);
         startActivity(i);
     }
 

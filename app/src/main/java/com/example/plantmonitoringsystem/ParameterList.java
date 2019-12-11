@@ -19,22 +19,26 @@ import java.util.List;
 
 public class ParameterList extends AppCompatActivity {
 
-    ArrayList<String> params;
+    ArrayList<String> params = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parameter_list);
 
-        ArrayList<String> parameterList = new ArrayList<String >();
+        ArrayList<Integer> count = new ArrayList<Integer>();
         String parameter;
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if(extras!=null){
             params = extras.getStringArrayList("DataList");
-            Log.e("Parameters","Parameters are: "+params);
+
+            //Log.e("Parameters","Parameters are: "+params);
             //parameterList = convertToList();
             parameter = extras.getString("Parameter");
+            count = extras.getIntegerArrayList("count");
+            Log.e("Count", "onCreate: "+count.size() );
+
 
             try {
                 ActionBar actionBar = getSupportActionBar();
@@ -44,7 +48,7 @@ public class ParameterList extends AppCompatActivity {
             }
 
             ListView listView = findViewById(R.id.parameterList);
-            ParameterListAdapter adapter = new ParameterListAdapter(this,params);
+            ParameterListAdapter adapter = new ParameterListAdapter(this,params,count);
             listView.setAdapter(adapter);
 
             }else {

@@ -1,6 +1,7 @@
 package com.example.plantmonitoringsystem.SupportClasses;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,13 @@ import androidx.annotation.Nullable;
 
 public class ParameterListAdapter extends ArrayAdapter {
 
-    int count ;
+    ArrayList<Integer> count;
 
     //constructor for calling the class
-    public ParameterListAdapter(@NonNull Context context, ArrayList<String> parameterList) {
+    public ParameterListAdapter(@NonNull Context context, ArrayList<String> parameterList,ArrayList<Integer> countList) {
         super(context,0, parameterList);
-        count = 1;
+        count = countList;
+        Log.e("Count", "ParameterListAdapter count: "+count.size() );
     }
 
     @NonNull
@@ -40,8 +42,8 @@ public class ParameterListAdapter extends ArrayAdapter {
         TextView timeView = listView.findViewById(R.id.time);
         String parameter = (String) getItem(position);
         textView.setText(parameter);
-        String time = "Before "+count+ " hours";
-        count = count + 1;
+        String time = "Before "+count.get(position)+ " hours";
+        //String time = "Past Record";
         timeView.setText(time);
 
         return listView;
