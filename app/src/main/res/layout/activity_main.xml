@@ -13,7 +13,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -57,106 +56,14 @@
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TableLayout
-        android:id="@+id/DataLayout"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding_layout"
+        android:scrollbars="vertical"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/padding_element">
-
-            <TextView
-                android:id="@+id/textView"
-                style="@style/Elements"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="paramsMoist"
-                android:text="Soil Moisture" />
-
-            <TextView
-                android:id="@+id/moistureLevel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/padding_element">
-
-            <TextView
-                android:id="@+id/textView3"
-                style="@style/Elements"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="paramsTemp"
-                android:text="Temperature" />
-
-            <TextView
-                android:id="@+id/temperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/padding_element">
-
-            <TextView
-                android:id="@+id/textView6"
-                style="@style/Elements"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="paramsLight"
-                android:text="Light Intensity" />
-
-            <TextView
-                android:id="@+id/lightIntensity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/padding_element">
-
-            <TextView
-                android:id="@+id/textView7"
-                style="@style/Elements"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="paramsHumid"
-                android:text="Humidity" />
-
-            <TextView
-                android:id="@+id/humidity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="" />
-
-        </TableRow>
-    </TableLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

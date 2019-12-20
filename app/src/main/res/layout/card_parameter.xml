@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp"
+    app:contentPadding="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="180dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <!--android:paddingTop="8dp"-->
+        <ImageView
+            android:id="@+id/icon_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:srcCompat="@drawable/temperature_icon" />
+
+        <TextView
+            android:id="@+id/parameter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Temperature"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/parametervalue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="35"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
