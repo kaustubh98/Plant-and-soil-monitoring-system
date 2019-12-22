@@ -4,12 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +30,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.qrcode.Mode;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -113,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 try{
-                    Log.e("Message",dataSnapshot.getValue().toString());
                     float t = dataSnapshot.getValue(Float.class);
                     final Intent i = new Intent(MainActivity.this,ParameterList.class);
                     switch (parameter){
@@ -136,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
                     values.add(1,humidity);
                     values.add(2,moisture);
                     values.add(3,light);
-                    Log.e("ValueCheck", "onDataChange: "+values.get(0) );
                     CardViewAdapter adapter = new CardViewAdapter(values);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
@@ -170,11 +183,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+            /**this method is called is when something has changed in the data. Our project will only push the data and not update it
+             * Hence, any event like this should be regarded as an error and ignored
+             */
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                /**this method is called is when something has changed in the data. Our project will only push the data and not update it
-                 * Hence, any event like this should be regarded as an error and ignored
-                 */
+
             }
 
             @Override
@@ -224,10 +238,52 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.sendData:
-                //send data in PDF form
+                sharePDF();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //share the data as PDF file
+    private void sharePDF() {
+
+        try {
+            Document document = new Document();
+            String path = getFilesDir()+"/FarmData.pdf";
+            File file = new File(path);
+            OutputStream stream = new FileOutputStream(file);
+
+            PdfWriter.getInstance(document,stream );
+            document.open();
+            document.add(new Paragraph("Temperature: "+temp));
+            document.add(new Paragraph("Humidity: "+humidity));
+            document.add(new Paragraph("Moisture: "+moisture));
+            document.add(new Paragraph("Light Intensity: "+light));
+            document.close();
+
+            Log.e("PDF", "Stream: "+stream);
+
+            Uri uri = FileProvider.getUriForFile(this,"com.example.plantmonitoringsystem",file);
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("application/pdf");
+            intent.putExtra(Intent.EXTRA_STREAM,uri);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            Log.e("PDF", "Just Opening Intent" );
+            startActivity(Intent.createChooser(intent, "Share Farm Details"));
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+            Log.e("PDF", "DocumentExpection: " +e.getMessage());
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.e("PDF", "FileNotFound: " +e.getMessage());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            Log.e("PDF", "Execption: "+e.getMessage() );
+        }
     }
 
     //sign Out when hardware not configured
