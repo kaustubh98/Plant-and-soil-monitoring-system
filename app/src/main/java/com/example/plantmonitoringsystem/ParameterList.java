@@ -87,7 +87,23 @@ public class ParameterList extends AppCompatActivity {
             });
 
             ActionBar actionBar = getSupportActionBar();
-            actionBar.setTitle(parameter);
+
+            switch (parameter){
+                case "Temperature":
+                    actionBar.setTitle("Temperature");
+                    break;
+                case "Humidity":
+                    actionBar.setTitle("Humidity");
+                    break;
+                case "Moisture":
+                    actionBar.setTitle("Soil Moisture Level");
+                    break;
+                case "LightIntensity":
+                    actionBar.setTitle("Light Intensity");
+                    break;
+
+            }
+
             }catch (NullPointerException ne){
                 ne.printStackTrace();
             }

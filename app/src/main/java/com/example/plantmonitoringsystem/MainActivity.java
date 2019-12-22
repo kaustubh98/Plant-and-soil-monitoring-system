@@ -248,11 +248,13 @@ public class MainActivity extends AppCompatActivity {
     private void sharePDF() {
 
         try {
-            Document document = new Document();
+            //create the file
             String path = getFilesDir()+"/FarmData.pdf";
             File file = new File(path);
             OutputStream stream = new FileOutputStream(file);
 
+            //add required content in the PDF file
+            Document document = new Document();
             PdfWriter.getInstance(document,stream );
             document.open();
             document.add(new Paragraph("Temperature: "+temp));
@@ -261,28 +263,30 @@ public class MainActivity extends AppCompatActivity {
             document.add(new Paragraph("Light Intensity: "+light));
             document.close();
 
-            Log.e("PDF", "Stream: "+stream);
-
+            //share the file
             Uri uri = FileProvider.getUriForFile(this,"com.example.plantmonitoringsystem",file);
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("application/pdf");
             intent.putExtra(Intent.EXTRA_STREAM,uri);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             Log.e("PDF", "Just Opening Intent" );
             startActivity(Intent.createChooser(intent, "Share Farm Details"));
+            stream.close();
 
         } catch (DocumentException e) {
             e.printStackTrace();
             Log.e("PDF", "DocumentExpection: " +e.getMessage());
+            Toast.makeText(this,"Could not generate the PDF file",Toast.LENGTH_SHORT).show();
         }catch (FileNotFoundException e) {
             e.printStackTrace();
             Log.e("PDF", "FileNotFound: " +e.getMessage());
+            Toast.makeText(this,"System Error occured while locating the File",Toast.LENGTH_SHORT).show();
         }
         catch (Exception e){
             e.printStackTrace();
             Log.e("PDF", "Execption: "+e.getMessage() );
+            Toast.makeText(this,"System Error occured",Toast.LENGTH_SHORT).show();
         }
     }
 
