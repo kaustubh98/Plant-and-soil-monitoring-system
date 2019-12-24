@@ -47,7 +47,7 @@ public class ParameterList extends AppCompatActivity {
             //get the detailed list
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             reference = FirebaseDatabase.getInstance().getReference(user.getUid());
-            reference.child(parameter).addChildEventListener(new ChildEventListener() {
+            reference.child("Average/"+parameter).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Float temporary = dataSnapshot.getValue(Float.class);

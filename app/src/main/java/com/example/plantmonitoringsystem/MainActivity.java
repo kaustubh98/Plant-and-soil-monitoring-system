@@ -8,8 +8,10 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,10 +20,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
 import com.example.plantmonitoringsystem.SupportClasses.CardViewAdapter;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     ArrayList<String> values = new ArrayList<String>();
     RecyclerView recyclerView;
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,27 +88,29 @@ public class MainActivity extends AppCompatActivity {
 
     //populate the card views with correct sensor data
     private void populateView() {
-
         values.clear();
-
-        Log.e("PopulateView","Populating View");
-
         try {
             Log.e("PopulateView","Listening for Parameters");
             //check for hardware configuration configuration
-            reference.child("Temperature").addValueEventListener(new ValueEventListener() {
+            reference.child("NumberOfUnits").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.hasChildren()){
-                        ListenForParameter("Moisture");
-                        ListenForParameter("Temperature");
-                        ListenForParameter("LightIntensity");
-                        ListenForParameter("Humidity");
 
-                    }else{
+                    try {
+                        if (dataSnapshot.getValue(Integer.class) != 0) {
+                            ListenForParameter("Moisture");
+                            ListenForParameter("Temperature");
+                            ListenForParameter("LightIntensity");
+                            ListenForParameter("Humidity");
+
+                        } else {
+                            progressDialog.dismiss();
+                            recyclerView.setVisibility(View.GONE);
+                            nullView.setVisibility(View.VISIBLE);
+                        }
+                    }catch(NullPointerException ne){
                         progressDialog.dismiss();
-                        recyclerView.setVisibility(View.GONE);
-                        nullView.setVisibility(View.VISIBLE);
+                        Toast.makeText(getApplicationContext(),"System Error Occured",Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -124,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e("PopulateView","Listening for "+parameter );
 
-        reference.child(parameter).addChildEventListener(new ChildEventListener() {
+        reference.child("Average/"+parameter).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 try{
@@ -234,14 +241,57 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.signOut:
                 FirebaseAuth.getInstance().signOut();
+                finish();
                 Intent intent = new Intent(this,signIn.class);
                 startActivity(intent);
                 break;
             case R.id.sendData:
                 sharePDF();
                 break;
+            case R.id.addSlave:
+                addSlave();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //add a slave unit to the farm
+    private void addSlave() {
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Describe the location of sensor unit");
+
+        //create the edit text
+        final EditText input = new EditText(this);
+        dialog.setView(input);
+
+        dialog.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                reference.child("NumberOfUnits").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String description = input.getText().toString().trim();
+                        int k = dataSnapshot.getValue(Integer.class);
+                        if(count != k){
+                            count = k+1;
+                            reference.child("zone" + count).child("Description").setValue(description);
+                            reference.child("NumberOfUnits").setValue(count);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });
+
+        dialog.setNegativeButton("Cancel",null);
+        dialog.show();
     }
 
     //share the data as PDF file
@@ -291,9 +341,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //sign Out when hardware not configured
-    public void signOut(View view){
-        FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(this,signIn.class);
+    public void Configure(View view){
+        Intent intent = new Intent(this,ConfigureHardware.class);
         startActivity(intent);
     }
 

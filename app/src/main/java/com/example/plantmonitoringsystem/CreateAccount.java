@@ -17,13 +17,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class CreateAccount extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseUser user;
+    private DatabaseReference reference;
 
-    EditText e_email,e_pass,e_name,e_contact,e_address,e_des;
+    EditText e_email,e_pass,e_name,e_contact;
     ProgressDialog progressDialog;
 
     @Override
@@ -34,6 +37,7 @@ public class CreateAccount extends AppCompatActivity {
         //intialize variables
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference();
 
         e_email = findViewById(R.id.email_create);
         e_pass = findViewById(R.id.password_create);
@@ -55,7 +59,7 @@ public class CreateAccount extends AppCompatActivity {
         String email = e_email.getText().toString().trim();
         String pass = e_pass.getText().toString().trim();
         String name = e_name.getText().toString().trim();
-        String contact = e_contact.getText().toString().trim();
+        final String contact = e_contact.getText().toString().trim();
 
 
         if(Validation(email,pass,name,contact)){
@@ -64,11 +68,10 @@ public class CreateAccount extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     progressDialog.dismiss();
-
                     if(task.isSuccessful()){
-                        Toast.makeText(getApplicationContext(),"Created Your Account Successfully",Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(CreateAccount.this,MainActivity.class);
-                        startActivity(i);
+                        InitializeDatabase(contact);
+                    }else{
+                        Toast.makeText(getApplicationContext(),task.getException().getMessage(),Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -77,6 +80,23 @@ public class CreateAccount extends AppCompatActivity {
         }
 
 
+    }
+
+    private void InitializeDatabase(String contact) {
+
+        try{
+            user = auth.getCurrentUser();
+            reference.child(user.getUid()).child("NumberOfUnits").setValue(0);
+            reference.child(user.getUid()).child("ContactNo").setValue(contact);
+
+        }catch(NullPointerException ne){
+            ne.printStackTrace();
+            Toast.makeText(this,"Could not create account due to system error",Toast.LENGTH_LONG).show();
+        }
+
+        Toast.makeText(getApplicationContext(),"Created Your Account Successfully",Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(CreateAccount.this,MainActivity.class);
+        startActivity(i);
     }
 
     private boolean Validation(String email,String pass,String name,String contact){
