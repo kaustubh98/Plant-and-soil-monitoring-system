@@ -6,9 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ParameterList">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_param"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <ListView
         android:id="@+id/parameterList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_param"/>
 </RelativeLayout>

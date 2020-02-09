@@ -3,16 +3,19 @@ package com.example.plantmonitoringsystem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,6 +28,8 @@ import android.widget.TableLayout;
 import android.widget.Toast;
 
 import com.example.plantmonitoringsystem.SupportClasses.CardViewAdapter;
+import com.example.plantmonitoringsystem.SupportClasses.PagerAdapter;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -65,13 +70,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //toolbar setup
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         //prompt to sign in for non registered users
         user = FirebaseAuth.getInstance().getCurrentUser();
         nullView = findViewById(R.id.NullView);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading Data...");
-
-        recyclerView = findViewById(R.id.recyclerView);
 
         if(user == null){
             Log.e("MainActivityUser","User null");
@@ -98,14 +105,16 @@ public class MainActivity extends AppCompatActivity {
 
                     try {
                         if (dataSnapshot.getValue(Integer.class) != 0) {
-                            ListenForParameter("Moisture");
-                            ListenForParameter("Temperature");
-                            ListenForParameter("LightIntensity");
-                            ListenForParameter("Humidity");
+                            PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
+                            ViewPager viewPager = findViewById(R.id.view_pager);
+                            viewPager.setAdapter(adapter);
+                            TabLayout tabLayout = findViewById(R.id.tabs);
+                            tabLayout.setupWithViewPager(viewPager);
 
                         } else {
                             progressDialog.dismiss();
-                            recyclerView.setVisibility(View.GONE);
+                            TabLayout tabLayout = findViewById(R.id.tabs);
+                            tabLayout.setVisibility(View.GONE);
                             nullView.setVisibility(View.VISIBLE);
                         }
                     }catch(NullPointerException ne){
@@ -125,94 +134,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
         }
-    }
-
-    private void ListenForParameter(final String parameter) {
-
-        Log.e("PopulateView","Listening for "+parameter );
-
-        reference.child("Average/"+parameter).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                try{
-                    float t = dataSnapshot.getValue(Float.class);
-                    final Intent i = new Intent(MainActivity.this,ParameterList.class);
-                    switch (parameter){
-                        case "Moisture":
-                            moisture = String.valueOf(t);
-                            break;
-                        case "Humidity":
-                            humidity = String.valueOf(t);
-                            progressDialog.dismiss();
-                            break;
-                        case "Temperature":
-                            temp = String.valueOf(t);
-                            break;
-                        case "LightIntensity":
-                            light = String.valueOf(t);
-                            break;
-                    }
-
-                    values.add(0,temp);
-                    values.add(1,humidity);
-                    values.add(2,moisture);
-                    values.add(3,light);
-                    CardViewAdapter adapter = new CardViewAdapter(values);
-                    recyclerView.setAdapter(adapter);
-                    recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
-
-                    //for handling click events
-                    adapter.setListener(new CardViewAdapter.Listener() {
-                        @Override
-                        public void onClick(int position) {
-                            switch (position){
-                                case 0:
-                                    i.putExtra("Parameter","Temperature");
-                                    break;
-                                case 1:
-                                    i.putExtra("Parameter","Humidity");
-                                    break;
-                                case 2:
-                                    i.putExtra("Parameter","Moisture");
-                                    break;
-                                case 3:
-                                    i.putExtra("Parameter","LightIntensity");
-                                    break;
-                            }
-                            startActivity(i);
-                        }
-                    });
-
-                }catch(Exception e){
-                    e.printStackTrace();
-                    Log.e("Listener",e.getMessage());
-                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-                }
-            }
-
-            /**this method is called is when something has changed in the data. Our project will only push the data and not update it
-             * Hence, any event like this should be regarded as an error and ignored
-             */
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
     //to ensure that user does not come back to main activity without sign in

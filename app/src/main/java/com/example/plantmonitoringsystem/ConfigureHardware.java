@@ -1,7 +1,9 @@
 package com.example.plantmonitoringsystem;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +32,12 @@ public class ConfigureHardware extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configure_hardware);
+
+        Toolbar toolbar = findViewById(R.id.toolbar_configure);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Configure Hardware");
 
         e_des = findViewById(R.id.description);
         e_id = findViewById(R.id.device_id);

@@ -6,9 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".ConfigureHardware">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_configure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding_layout"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar_configure">
 
         <LinearLayout
             android:layout_width="match_parent"

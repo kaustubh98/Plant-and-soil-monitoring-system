@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,6 +36,12 @@ public class ParameterList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parameter_list);
+
+        //toolbar setup
+        Toolbar toolbar = findViewById(R.id.toolbar_param);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         final ArrayList<Integer> count = new ArrayList<Integer>();
         String parameter;
@@ -86,7 +93,7 @@ public class ParameterList extends AppCompatActivity {
                 }
             });
 
-            ActionBar actionBar = getSupportActionBar();
+            actionBar = getSupportActionBar();
 
             switch (parameter){
                 case "Temperature":

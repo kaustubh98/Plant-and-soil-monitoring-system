@@ -13,10 +13,14 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ConfigureHardware"></activity>
-        <activity android:name=".ParameterList" />
-        <activity android:name=".CreateAccount" />
-        <activity android:name=".signIn" />
+        <activity android:name=".ConfigureHardware"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".ParameterList"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".CreateAccount"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".signIn"
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
