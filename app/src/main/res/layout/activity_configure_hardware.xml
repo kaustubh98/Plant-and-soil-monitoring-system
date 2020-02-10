@@ -10,7 +10,6 @@
         android:id="@+id/toolbar_configure"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/padding_layout"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -31,7 +30,7 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="64dp"
                 android:text="Set up Your Hardware"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="30sp" />

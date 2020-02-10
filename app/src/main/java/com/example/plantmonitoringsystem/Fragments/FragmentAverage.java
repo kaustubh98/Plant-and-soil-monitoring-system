@@ -118,7 +118,6 @@ public class FragmentAverage extends Fragment {
                 }catch(Exception e){
                     e.printStackTrace();
                     Log.e("Listener",e.getMessage());
-                    Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_LONG).show();
                 }
             }
 

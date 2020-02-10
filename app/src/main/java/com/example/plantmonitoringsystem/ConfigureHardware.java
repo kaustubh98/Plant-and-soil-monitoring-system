@@ -65,7 +65,7 @@ public class ConfigureHardware extends AppCompatActivity {
                         //adding slave unit
                         if(count != temp){
                             count = temp+1;
-                            reference.child(user.getUid()).child("zone" + count).child("Description").setValue(des);
+                            reference.child(user.getUid()).child("Zones/zone" + count).child("Description").setValue(des);
                             reference.child(user.getUid() + "/NumberOfUnits").setValue(count);
                         }
 
