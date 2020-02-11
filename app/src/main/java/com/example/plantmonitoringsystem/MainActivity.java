@@ -27,6 +27,8 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
+import com.example.plantmonitoringsystem.Fragments.FragmentAverage;
+import com.example.plantmonitoringsystem.Fragments.FragmentZonal;
 import com.example.plantmonitoringsystem.SupportClasses.CardViewAdapter;
 import com.example.plantmonitoringsystem.SupportClasses.PagerAdapter;
 import com.google.android.material.tabs.TabLayout;
@@ -228,10 +230,10 @@ public class MainActivity extends AppCompatActivity {
             Document document = new Document();
             PdfWriter.getInstance(document,stream );
             document.open();
-            document.add(new Paragraph("Temperature: "+temp));
-            document.add(new Paragraph("Humidity: "+humidity));
-            document.add(new Paragraph("Moisture: "+moisture));
-            document.add(new Paragraph("Light Intensity: "+light));
+            document.add(new Paragraph("Temperature: "+FragmentAverage.getTemp()));
+            document.add(new Paragraph("Humidity: "+FragmentAverage.getHumidity()));
+            document.add(new Paragraph("Moisture: "+ FragmentAverage.getMoisture()));
+            document.add(new Paragraph("Light Intensity: "+FragmentAverage.getLight()));
             document.close();
 
             //share the file

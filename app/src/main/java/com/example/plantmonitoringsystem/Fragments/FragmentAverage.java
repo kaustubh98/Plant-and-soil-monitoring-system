@@ -39,7 +39,7 @@ public class FragmentAverage extends Fragment {
     private DatabaseReference reference;
     private FirebaseUser user;
     private RecyclerView recyclerView;
-    private String moisture,humidity,temp,light;
+    private static String moisture,humidity,temp,light;
 
     public FragmentAverage() {
         // Required empty public constructor
@@ -145,5 +145,22 @@ public class FragmentAverage extends Fragment {
             }
         });
     }
+
+    public static String getMoisture(){
+        return moisture;
+    }
+
+    public static String getHumidity() {
+        return humidity;
+    }
+
+    public static String getTemp() {
+        return temp;
+    }
+
+    public static String getLight() {
+        return light;
+    }
+
 
 }

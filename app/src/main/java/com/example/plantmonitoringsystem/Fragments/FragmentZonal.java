@@ -60,6 +60,13 @@ public class FragmentZonal extends Fragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference(user.getUid()+"/Zones");
 
+        Tlist.clear();
+        Hlist.clear();
+        Llist.clear();
+        Mlist.clear();
+        desList.clear();
+
+
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
