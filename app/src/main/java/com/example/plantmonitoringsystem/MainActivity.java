@@ -31,6 +31,7 @@ import com.example.plantmonitoringsystem.Fragments.FragmentAverage;
 import com.example.plantmonitoringsystem.Fragments.FragmentZonal;
 import com.example.plantmonitoringsystem.SupportClasses.CardViewAdapter;
 import com.example.plantmonitoringsystem.SupportClasses.PagerAdapter;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,9 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseUser user;
     private DatabaseReference reference;
-    private ConstraintLayout nullView;
-    String moisture,humidity,temp,light;
-    ProgressDialog progressDialog;
+    private ConstraintLayout nullView,loadingView;
+    private AppBarLayout appBarLayout;
     ArrayList<String> values = new ArrayList<String>();
     RecyclerView recyclerView;
     int count = 0;
@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
         //prompt to sign in for non registered users
         user = FirebaseAuth.getInstance().getCurrentUser();
         nullView = findViewById(R.id.NullView);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading Data...");
+        loadingView = findViewById(R.id.loadingView);
+        appBarLayout = findViewById(R.id.appBarLayout);
 
         if(user == null){
             Log.e("MainActivityUser","User null");
@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this,signIn.class);
             startActivity(intent);
         }else{
-            progressDialog.show();
             reference = FirebaseDatabase.getInstance().getReference(user.getUid());
             populateView();
         }
@@ -112,15 +111,19 @@ public class MainActivity extends AppCompatActivity {
                             viewPager.setAdapter(adapter);
                             TabLayout tabLayout = findViewById(R.id.tabs);
                             tabLayout.setupWithViewPager(viewPager);
+                            appBarLayout.setVisibility(View.VISIBLE);
+                            loadingView.setVisibility(View.GONE);
 
                         } else {
-                            progressDialog.dismiss();
+                            appBarLayout.setVisibility(View.VISIBLE);
+                            loadingView.setVisibility(View.GONE);
                             TabLayout tabLayout = findViewById(R.id.tabs);
                             tabLayout.setVisibility(View.GONE);
                             nullView.setVisibility(View.VISIBLE);
                         }
                     }catch(NullPointerException ne){
-                        progressDialog.dismiss();
+                        appBarLayout.setVisibility(View.VISIBLE);
+                        loadingView.setVisibility(View.GONE);
                         Toast.makeText(getApplicationContext(),"System Error Occured",Toast.LENGTH_LONG).show();
                     }
                 }
