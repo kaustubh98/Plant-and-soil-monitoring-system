@@ -1,6 +1,7 @@
 package com.example.plantmonitoringsystem.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -16,7 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.plantmonitoringsystem.R;
+import com.example.plantmonitoringsystem.SupportClasses.CardViewAdapter;
 import com.example.plantmonitoringsystem.SupportClasses.ZoneDisplayAdapter;
+import com.example.plantmonitoringsystem.ZonalDetails;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -52,7 +55,7 @@ public class FragmentZonal extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_zonal, container, false);
@@ -103,6 +106,18 @@ public class FragmentZonal extends Fragment {
                 ZoneDisplayAdapter adapter = new ZoneDisplayAdapter(Tlist, Hlist, Mlist, Llist, desList);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(),1));
+
+                adapter.setListener(new ZoneDisplayAdapter.Listener() {
+                    @Override
+                    public void onClick(int position) {
+                        Intent intent = new Intent(getContext(), ZonalDetails.class);
+                        intent.putExtra("Title",desList.get(position));
+                        int temp = position+1;
+                        intent.putExtra("ZoneID","zone"+temp);
+                        startActivity(intent);
+                    }
+                });
+
             }
 
             @Override
@@ -125,52 +140,6 @@ public class FragmentZonal extends Fragment {
 
             }
         });
-
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot zone: dataSnapshot.getChildren() ){
-//                    DataSnapshot humid = zone.child("Humidity");
-//                    DataSnapshot temp = zone.child("Temperature");
-//                    DataSnapshot light = zone.child("LightIntensity");
-//                    DataSnapshot moitst = zone.child("Moisture");
-//
-//                    for(DataSnapshot child : humid.getChildren()){
-//                    humidity = child.getValue(Float.class);
-//                    }
-//
-//                    for(DataSnapshot child : temp.getChildren()){
-//                        temperature = child.getValue(Float.class);
-//                    }
-//
-//                    for(DataSnapshot child : moitst.getChildren()){
-//                        moisture = child.getValue(Float.class);
-//                    }
-//
-//                    for(DataSnapshot child : light.getChildren()){
-//                        Light = child.getValue(Float.class);
-//                    }
-//
-//                    Log.e(TAG, "onChildAdded: "+humidity);
-//                    Tlist.add(temperature);
-//                    Hlist.add(humidity);
-//                    Llist.add(Light);
-//                    Mlist.add(moisture);
-//                    desList.add(zone.child("Description").getValue(String.class));
-//                }
-//
-//                //load the recycler view
-//                ZoneDisplayAdapter adapter = new ZoneDisplayAdapter(Tlist,Hlist,Mlist,Llist,desList);
-//                recyclerView.setAdapter(adapter);
-//                recyclerView.setLayoutManager(new GridLayoutManager(getContext(),1));
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
 
         return root;
     }

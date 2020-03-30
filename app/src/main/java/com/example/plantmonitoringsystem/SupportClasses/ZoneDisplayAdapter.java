@@ -1,6 +1,7 @@
 package com.example.plantmonitoringsystem.SupportClasses;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -16,6 +17,18 @@ public class ZoneDisplayAdapter extends RecyclerView.Adapter<ZoneDisplayAdapter.
 
     private ArrayList<Float> Tlist, Hlist, Mlist, Llist;
     private ArrayList<String> desList;
+    private Listener listener;
+
+    //interface for implementing clicks
+    public interface Listener{
+        void onClick(int position);
+    }
+
+    //activities and fragments will use this method to register as a listener
+    public void setListener(Listener listener){
+        this.listener = listener;
+    }
+
 
     public ZoneDisplayAdapter(ArrayList<Float> tlist, ArrayList<Float> hlist, ArrayList<Float> mlist, ArrayList<Float> llist, ArrayList<String> desList) {
         Tlist = tlist;
@@ -34,7 +47,7 @@ public class ZoneDisplayAdapter extends RecyclerView.Adapter<ZoneDisplayAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder,final int position) {
         //get the cardview
         CardView cardView = holder.cardView;
 
@@ -51,6 +64,17 @@ public class ZoneDisplayAdapter extends RecyclerView.Adapter<ZoneDisplayAdapter.
         moisture.setText(String.valueOf(Mlist.get(position)));
         light.setText(String.valueOf(Llist.get(position)));
         description.setText(desList.get(position));
+
+        //attach the listener
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener!=null){
+                    listener.onClick(position);
+                }
+            }
+        });
+
 
     }
 
