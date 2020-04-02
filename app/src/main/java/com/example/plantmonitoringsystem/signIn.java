@@ -97,4 +97,8 @@ public class signIn extends AppCompatActivity {
         startActivity(i);
     }
 
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+    }
 }

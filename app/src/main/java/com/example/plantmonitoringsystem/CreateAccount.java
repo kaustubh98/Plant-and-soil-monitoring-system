@@ -67,7 +67,7 @@ public class CreateAccount extends AppCompatActivity {
     public void createAccount (View view){
         String email = e_email.getText().toString().trim();
         String pass = e_pass.getText().toString().trim();
-        String name = e_name.getText().toString().trim();
+        final String name = e_name.getText().toString().trim();
         final String contact = e_contact.getText().toString().trim();
 
 
@@ -78,7 +78,7 @@ public class CreateAccount extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     progressDialog.dismiss();
                     if(task.isSuccessful()){
-                        InitializeDatabase(contact);
+                        InitializeDatabase(contact,name);
                     }else{
                         Toast.makeText(getApplicationContext(),task.getException().getMessage(),Toast.LENGTH_LONG).show();
                     }
@@ -91,12 +91,13 @@ public class CreateAccount extends AppCompatActivity {
 
     }
 
-    private void InitializeDatabase(String contact) {
+    private void InitializeDatabase(String contact,String name) {
 
         try{
             user = auth.getCurrentUser();
             reference.child(user.getUid()).child("NumberOfUnits").setValue(0);
             reference.child(user.getUid()).child("ContactNo").setValue(contact);
+            reference.child(user.getUid()).child("Name").setValue(name);
 
         }catch(NullPointerException ne){
             ne.printStackTrace();

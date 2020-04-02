@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.example.plantmonitoringsystem.Fragments.FragmentAverage;
 import com.example.plantmonitoringsystem.Fragments.FragmentZonal;
 import com.example.plantmonitoringsystem.SupportClasses.CardViewAdapter;
+import com.example.plantmonitoringsystem.SupportClasses.CreatePDF;
 import com.example.plantmonitoringsystem.SupportClasses.PagerAdapter;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
@@ -226,18 +227,9 @@ public class MainActivity extends AppCompatActivity {
         try {
             //create the file
             String path = getFilesDir()+"/FarmData.pdf";
-            File file = new File(path);
-            OutputStream stream = new FileOutputStream(file);
 
-            //add required content in the PDF file
-            Document document = new Document();
-            PdfWriter.getInstance(document,stream );
-            document.open();
-            document.add(new Paragraph("Temperature: "+FragmentAverage.getTemp()));
-            document.add(new Paragraph("Humidity: "+FragmentAverage.getHumidity()));
-            document.add(new Paragraph("Moisture: "+ FragmentAverage.getMoisture()));
-            document.add(new Paragraph("Light Intensity: "+FragmentAverage.getLight()));
-            document.close();
+            CreatePDF pdf = new CreatePDF(path);
+            File file = pdf.getFile();
 
             //share the file
             Uri uri = FileProvider.getUriForFile(this,"com.example.plantmonitoringsystem",file);
@@ -248,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Log.e("PDF", "Just Opening Intent" );
             startActivity(Intent.createChooser(intent, "Share Farm Details"));
-            stream.close();
+            //stream.close();
 
         } catch (DocumentException e) {
             e.printStackTrace();

@@ -61,6 +61,7 @@
             android:background="?attr/colorPrimary"
             android:theme="@style/AppTheme"
             app:tabIndicatorColor="#FFFFFF"
+            app:tabMode="fixed"
             app:tabSelectedTextColor="#FFFFFF"
             app:tabTextAppearance="@style/TextAppearance.AppCompat.Medium"
             app:tabTextColor="#80CBC4" />

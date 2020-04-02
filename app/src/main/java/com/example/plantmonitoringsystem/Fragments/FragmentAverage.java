@@ -64,64 +64,68 @@ public class FragmentAverage extends Fragment {
 
         Log.e("PopulateView","Listening for "+parameter );
 
-        reference.child("Average/"+parameter).addChildEventListener(new ChildEventListener() {
+        reference.child("Average/" + parameter)
+        .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                try{
-                    float t = dataSnapshot.getValue(Float.class);
+                try {
+                    String t = dataSnapshot.getValue(String.class);
+                    t = t.split("_")[0];
+                    Log.e("Reading Value","Split: "+t);
                     final Intent i = new Intent(getContext(), ParameterList.class);
-                    switch (parameter){
+                    switch (parameter) {
                         case "Moisture":
-                            moisture = String.valueOf(t);
+                            moisture = t;
                             break;
                         case "Humidity":
-                            humidity = String.valueOf(t);
+                            humidity = t;
                             break;
                         case "Temperature":
-                            temp = String.valueOf(t);
+                            temp = t;
                             break;
                         case "LightIntensity":
-                            light = String.valueOf(t);
+                            light = t;
                             break;
                     }
 
-                    values.add(0,temp);
-                    values.add(1,humidity);
-                    values.add(2,moisture);
-                    values.add(3,light);
+                    values.add(0, temp);
+                    values.add(1, humidity);
+                    values.add(2, moisture);
+                    values.add(3, light);
                     CardViewAdapter adapter = new CardViewAdapter(values);
                     recyclerView.setAdapter(adapter);
-                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
                     //for handling click events
                     adapter.setListener(new CardViewAdapter.Listener() {
                         @Override
                         public void onClick(int position) {
-                            switch (position){
+                            switch (position) {
                                 case 0:
-                                    i.putExtra("Parameter","Temperature");
+                                    i.putExtra("Parameter", "Temperature");
                                     break;
                                 case 1:
-                                    i.putExtra("Parameter","Humidity");
+                                    i.putExtra("Parameter", "Humidity");
                                     break;
                                 case 2:
-                                    i.putExtra("Parameter","Moisture");
+                                    i.putExtra("Parameter", "Moisture");
                                     break;
                                 case 3:
-                                    i.putExtra("Parameter","LightIntensity");
+                                    i.putExtra("Parameter", "LightIntensity");
                                     break;
                             }
                             startActivity(i);
                         }
                     });
 
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e("Listener",e.getMessage());
+                    Log.e("Listener", e.getMessage());
                 }
             }
 
-            /**this method is called is when something has changed in the data. Our project will only push the data and not update it
+            /**
+             * this method is called is when something has changed in the data. Our project will only push the data and not update it
              * Hence, any event like this should be regarded as an error and ignored
              */
             @Override

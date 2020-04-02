@@ -33,7 +33,7 @@ public class FragmentLight extends Fragment {
     private DatabaseReference reference;
     private ListView listView;
     private String zone;
-    private ArrayList<Integer> count = new ArrayList<Integer>();
+    private ArrayList<Long> count = new ArrayList<Long>();
 
     public FragmentLight(String Zone) {
         // Required empty public constructor
@@ -60,7 +60,7 @@ public class FragmentLight extends Fragment {
 
                 //get the count
                 count.clear();
-                for(int i=0;i<params.size();i++){
+                for(long i=0;i<params.size();i++){
                     count.add(i);
                 }
 

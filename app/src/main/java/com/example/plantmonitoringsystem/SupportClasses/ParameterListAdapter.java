@@ -10,21 +10,22 @@ import android.widget.TextView;
 
 import com.example.plantmonitoringsystem.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class ParameterListAdapter extends ArrayAdapter {
 
-    ArrayList<Integer> count;
+    private ArrayList<Long> timeStamp;
 
     //constructor for calling the class
-    public ParameterListAdapter(@NonNull Context context, ArrayList<String> parameterList,ArrayList<Integer> countList) {
+    public ParameterListAdapter(@NonNull Context context, ArrayList<String> parameterList, ArrayList<Long> countList) {
         super(context,0, parameterList);
-        count = countList;
-        Log.e("Count", "ParameterListAdapter count: "+count.size() );
+        timeStamp = countList;
+        Log.e("Count", "ParameterListAdapter timeStamp: "+ timeStamp.size() );
     }
 
     @NonNull
@@ -42,8 +43,12 @@ public class ParameterListAdapter extends ArrayAdapter {
         TextView timeView = listView.findViewById(R.id.time);
         String parameter = (String) getItem(position);
         textView.setText(parameter);
-        String time = "Before "+count.get(position)+ " hours";
-        //String time = "Past Record";
+
+        //get the time
+        SimpleDateFormat format = new SimpleDateFormat("h:mm a");
+        String time = format.format(new Date(timeStamp.get(position)));
+
+        //String timeStamp = "Past Record";
         timeView.setText(time);
 
         return listView;

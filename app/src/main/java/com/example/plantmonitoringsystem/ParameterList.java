@@ -8,7 +8,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,10 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 public class ParameterList extends AppCompatActivity {
 
@@ -43,7 +38,7 @@ public class ParameterList extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        final ArrayList<Integer> count = new ArrayList<Integer>();
+        final ArrayList<Long> timestamp = new ArrayList<>();
         String parameter;
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -57,17 +52,14 @@ public class ParameterList extends AppCompatActivity {
             reference.child("Average/"+parameter).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Float temporary = dataSnapshot.getValue(Float.class);
-                    params.add(0,String.valueOf(temporary));
-
-                    //get the count
-                    count.clear();
-                    for(int i=0;i<params.size();i++){
-                        count.add(i);
-                    }
+                    String temporary = dataSnapshot.getValue(String.class);
+                    String value = temporary.split("_")[0];
+                    Long mTimeStamp = Long.valueOf(temporary.split("_")[1]);
+                    params.add(0,value);
+                    timestamp.add(mTimeStamp);
 
                     ListView listView = findViewById(R.id.parameterList);
-                    ParameterListAdapter adapter = new ParameterListAdapter(getApplicationContext(),params,count);
+                    ParameterListAdapter adapter = new ParameterListAdapter(getApplicationContext(),params,timestamp);
                     listView.setAdapter(adapter);
 
                 }
