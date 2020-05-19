@@ -1,6 +1,12 @@
 package com.example.plantmonitoringsystem.SupportClasses;
 
+import android.util.Log;
+
 import com.example.plantmonitoringsystem.Fragments.FragmentAverage;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -22,10 +28,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import static android.content.ContentValues.TAG;
+
 public class CreatePDF {
 
     private String path;
     private PdfPTable AverageDetailsTable = new PdfPTable(2);
+    private String units = "-1";
 
     public CreatePDF(String path) {
         this.path = path;
@@ -44,7 +57,7 @@ public class CreatePDF {
 
         //add heading
         Font mHeadingFont = new Font(baseFont,36.0f,Font.BOLD, BaseColor.BLACK);
-        Chunk mHeadingChunk = new Chunk("My Farm",mHeadingFont);
+        Chunk mHeadingChunk = new Chunk(FragmentAverage.getName()+"'s Farm",mHeadingFont);
         Paragraph mHeading = new Paragraph(mHeadingChunk);
         mHeading.setAlignment(Element.ALIGN_CENTER);
         document.add(mHeading);
@@ -58,7 +71,7 @@ public class CreatePDF {
 
         //add farm description
         Font mFarmDescriptionFont = new Font(baseFont,25.0f,Font.NORMAL);
-        Chunk mFarmDescriptionChunk = new Chunk("This farm is covered 2 units. These deployed units cover various sections of the farm. " +
+        Chunk mFarmDescriptionChunk = new Chunk("This farm is covered by "+FragmentAverage.getNumberOfUnits()+" units. These deployed units cover various sections of the farm. " +
                 "The table below shows the average of the data received from these units.",mFarmDescriptionFont);
         Paragraph mFarmDescription = new Paragraph(mFarmDescriptionChunk);
         document.add(mFarmDescription);
@@ -77,17 +90,11 @@ public class CreatePDF {
         insertCell(FragmentAverage.getLight(),new Font(baseFont,25.0f,Font.NORMAL));
         document.add(AverageDetailsTable);
 
-
-
-//        document.add(new Paragraph("Temperature: "+ FragmentAverage.getTemp()));
-//        document.add(new Paragraph("Humidity: "+FragmentAverage.getHumidity()));
-//        document.add(new Paragraph("Moisture: "+ FragmentAverage.getMoisture()));
-//        document.add(new Paragraph("Light Intensity: "+FragmentAverage.getLight()));
-
         document.close();
         stream.close();
         return file;
     }
+
 
     private void insertCell(String text, Font font) {
         PdfPCell cell = new PdfPCell(new Phrase(text.trim(),font));

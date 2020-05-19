@@ -44,10 +44,10 @@ public class FragmentZonal extends Fragment {
     private DatabaseReference reference;
     private FirebaseUser user;
     private RecyclerView recyclerView;
-    private Float moisture;
-    private Float humidity;
-    private Float temperature;
-    private Float Light;
+    private String moisture;
+    private String humidity;
+    private String temperature;
+    private String Light;
 
     public FragmentZonal() {
         // Required empty public constructor
@@ -80,26 +80,26 @@ public class FragmentZonal extends Fragment {
                 DataSnapshot moitst = dataSnapshot.child("Moisture");
 
                 for (DataSnapshot child : humid.getChildren()) {
-                    humidity = child.getValue(Float.class);
+                    humidity = child.getValue(String.class).split("_")[0];
                 }
 
                 for (DataSnapshot child : temp.getChildren()) {
-                    temperature = child.getValue(Float.class);
+                    temperature = child.getValue(String.class).split("_")[0];
                 }
 
                 for (DataSnapshot child : moitst.getChildren()) {
-                    moisture = child.getValue(Float.class);
+                    moisture = child.getValue(String.class).split("_")[0];
                 }
 
                 for (DataSnapshot child : light.getChildren()) {
-                    Light = child.getValue(Float.class);
+                    Light = child.getValue(String.class).split("_")[0];
                 }
 
                 Log.e(TAG, "onChildAdded: " + humidity);
-                Tlist.add(temperature);
-                Hlist.add(humidity);
-                Llist.add(Light);
-                Mlist.add(moisture);
+                Tlist.add(Float.valueOf(temperature));
+                Hlist.add(Float.valueOf(humidity));
+                Llist.add(Float.valueOf(Light));
+                Mlist.add(Float.valueOf(moisture));
                 desList.add(dataSnapshot.child("Description").getValue(String.class));
 
                 //load the recycler view

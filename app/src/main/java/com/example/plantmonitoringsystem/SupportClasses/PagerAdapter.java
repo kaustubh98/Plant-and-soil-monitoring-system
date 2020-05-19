@@ -23,15 +23,13 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 return new FragmentAverage();
             case 1:
                 return new FragmentZonal();
-            case 2:
-                return new FragmentDisease();
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Nullable
@@ -43,8 +41,6 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 return "Average";
             case 1:
                 return "Zones";
-            case 2:
-                return "Leaf Monitoring";
         }
 
         return null;

@@ -29,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,8 @@ public class FragmentAverage extends Fragment {
 
     private ArrayList<String> values = new ArrayList<String>();
     private DatabaseReference reference;
+    private static String units = "-1";
+    private static String name;
     private FirebaseUser user;
     private RecyclerView recyclerView;
     private static String moisture,humidity,temp,light;
@@ -56,6 +59,22 @@ public class FragmentAverage extends Fragment {
         ListenForParameter("Humidity");
         ListenForParameter("LightIntensity");
         ListenForParameter("Temperature");
+
+        //getting number of units and name
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int mUnits = dataSnapshot.child("NumberOfUnits").getValue(Integer.class);
+                units = String.valueOf(mUnits);
+                name = dataSnapshot.child("Name").getValue(String.class);
+                
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         return root;
     }
 
@@ -164,6 +183,14 @@ public class FragmentAverage extends Fragment {
 
     public static String getLight() {
         return light;
+    }
+
+    public static String getNumberOfUnits() {
+        return units;
+    }
+
+    public static String getName(){
+        return name;
     }
 
 

@@ -29,11 +29,11 @@ import java.util.ArrayList;
  */
 public class FragmentMoisture extends Fragment {
 
-    ArrayList<String> params = new ArrayList<String>();
+    private ArrayList<String> params = new ArrayList<String>();
     private DatabaseReference reference;
     private ListView listView;
     private String zone;
-    private ArrayList<Long> count = new ArrayList<Long>();
+    private ArrayList<Long> timestamp = new ArrayList<Long>();
 
     public FragmentMoisture(String Zone) {
         // Required empty public constructor
@@ -55,16 +55,13 @@ public class FragmentMoisture extends Fragment {
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Float temp = dataSnapshot.getValue(Float.class);
-                params.add(0,String.valueOf(temp));
+                String moisture = dataSnapshot.getValue(String.class).split("_")[0];
+                String temporary = dataSnapshot.getValue(String.class).split("_")[1];
+                Long mTimeStamp = Long.valueOf(temporary);
+                params.add(0,moisture);
+                timestamp.add(mTimeStamp);
 
-                //get the count
-                count.clear();
-                for(long i=0;i<params.size();i++){
-                    count.add(i);
-                }
-
-                ParameterListAdapter adapter = new ParameterListAdapter(getContext(),params,count);
+                ParameterListAdapter adapter = new ParameterListAdapter(getContext(),params,timestamp);
                 listView.setAdapter(adapter);
             }
 

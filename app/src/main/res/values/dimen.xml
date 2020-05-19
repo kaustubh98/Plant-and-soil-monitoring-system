@@ -3,4 +3,7 @@
     <dimen name="formVaueTopPadding">16dp</dimen>
     <dimen name="padding_element">16dp</dimen>
     <dimen name="padding_layout">16dp</dimen>
+    <dimen name="settingTextSize">18sp</dimen>
+    <dimen name="SettingTextLeftPadding">16dp</dimen>
+    <dimen name="settingTextViewLength">24dp</dimen>
 </resources>

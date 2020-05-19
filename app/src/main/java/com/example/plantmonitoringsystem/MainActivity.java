@@ -6,60 +6,60 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.pdf.PdfDocument;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TableLayout;
 import android.widget.Toast;
 
-import com.example.plantmonitoringsystem.Fragments.FragmentAverage;
-import com.example.plantmonitoringsystem.Fragments.FragmentZonal;
-import com.example.plantmonitoringsystem.SupportClasses.CardViewAdapter;
 import com.example.plantmonitoringsystem.SupportClasses.CreatePDF;
 import com.example.plantmonitoringsystem.SupportClasses.PagerAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.itextpdf.text.Document;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StreamDownloadTask;
+import com.google.firebase.storage.UploadTask;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.qrcode.Mode;
+import com.itextpdf.text.pdf.codec.Base64;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.DecimalFormat;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private FirebaseUser user;
     private DatabaseReference reference;
     private ConstraintLayout nullView,loadingView;
@@ -67,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> values = new ArrayList<String>();
     RecyclerView recyclerView;
     int count = 0;
+    Uri ImageUri;
+    byte[] bytesFile;
+    private int WRITE_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,11 +178,23 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sendData:
                 sharePDF();
                 break;
-            case R.id.addSlave:
-                addSlave();
+            case R.id.setting:
+                // go to settings activity
+                Intent i = new Intent(this,Settings.class);
+                startActivity(i);
                 break;
+            case R.id.FarmImage:
+                shareImages();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void shareImages() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent,"Please select an image"),REQUEST_IMAGE_CAPTURE);
+
     }
 
     //add a slave unit to the farm
@@ -224,37 +239,146 @@ public class MainActivity extends AppCompatActivity {
     //share the data as PDF file
     private void sharePDF() {
 
-        try {
-            //create the file
-            String path = getFilesDir()+"/FarmData.pdf";
+        //try {
 
-            CreatePDF pdf = new CreatePDF(path);
-            File file = pdf.getFile();
 
-            //share the file
-            Uri uri = FileProvider.getUriForFile(this,"com.example.plantmonitoringsystem",file);
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_SEND);
-            intent.setType("application/pdf");
-            intent.putExtra(Intent.EXTRA_STREAM,uri);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Log.e("PDF", "Just Opening Intent" );
-            startActivity(Intent.createChooser(intent, "Share Farm Details"));
-            //stream.close();
+            StorageReference reference = FirebaseStorage.getInstance().getReference(user.getUid()+"/Abstract.pdf");
+            reference.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
 
-        } catch (DocumentException e) {
-            e.printStackTrace();
-            Log.e("PDF", "DocumentExpection: " +e.getMessage());
-            Toast.makeText(this,"Could not generate the PDF file",Toast.LENGTH_SHORT).show();
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Log.e("PDF", "FileNotFound: " +e.getMessage());
-            Toast.makeText(this,"System Error occured while locating the File",Toast.LENGTH_SHORT).show();
+                    bytesFile = bytes;
+                    storeTestFile();
+                }
+            });
+
+//            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                @Override
+//                public void onSuccess(Uri uri) {
+//                    File file = new File(uri.getPath());
+//                    Log.e("PDF", "onSuccess: File:"+file.getName());
+//                    Log.e("PDF", "onSuccess: FilePath:"+file.getPath());
+//                    Log.e("PDF", "onSuccess: URI path:"+uri.getPath());
+//                    try {
+//                        InputStream stream = new FileInputStream(file);
+//                        File fileShare = new File(Environment.getExternalStorageDirectory(),"Abstract.pdf");
+//                        OutputStream out = new FileOutputStream(fileShare.getName());
+//                        int c;
+//                        while ((c = stream.read()) != -1) {
+//                            out.write(c);
+//                        }
+//
+//                        if (stream != null) {
+//                            stream.close();
+//                        }
+//                        if (out != null) {
+//                            out.close();
+//                        }
+//
+//                    }catch(FileNotFoundException e){
+//                        e.printStackTrace();
+//                        Log.e("PDF", "Teri file nahi mili... ");
+//                    }catch (IOException e){
+//                        e.printStackTrace();
+//                        Log.e("PDF", "Stream read nahi kar paye ");
+//                    }
+////                    Intent intent = new Intent();
+////                    Uri uriShare = FileProvider.getUriForFile(getApplicationContext(),"com.example.plantmonitoringsystem",file);
+////                    intent.setAction(Intent.ACTION_SEND);
+////                    intent.setType("application/pdf");
+////                    intent.putExtra(Intent.EXTRA_STREAM,uriShare);
+////                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+////                    Log.e("PDF", "Just Opening Intent" );
+////                    startActivity(Intent.createChooser(intent, "Share Farm Details"));
+//                }
+//            });
+//
+//
+////            reference.getStream().addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {
+////                @Override
+////                public void onSuccess(StreamDownloadTask.TaskSnapshot taskSnapshot) {
+//////                    InputStream stream =  taskSnapshot.getStream();
+//////                    Log.e("Stream",stream);
+////
+////                }
+////            });
+//
+////            //create the file
+////            String path = getFilesDir()+"/FarmData.pdf";
+////
+////            CreatePDF pdf = new CreatePDF(path);
+////            File file = pdf.getFile();
+////
+////            //testing of saving file
+////            storeTestFile();
+//
+//            //share the file
+////            Uri uri = FileProvider.getUriForFile(this,"com.example.plantmonitoringsystem",file);
+////            Intent intent = new Intent();
+////            intent.setAction(Intent.ACTION_SEND);
+////            intent.setType("application/pdf");
+////            intent.putExtra(Intent.EXTRA_STREAM,uri);
+////            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+////            Log.e("PDF", "Just Opening Intent" );
+////            startActivity(Intent.createChooser(intent, "Share Farm Details"));
+//            //stream.close();
+//
+////        } catch (DocumentException e) {
+////            e.printStackTrace();
+////            Log.e("PDF", "DocumentExpection: " +e.getMessage());
+////            Toast.makeText(this,"Could not generate the PDF file",Toast.LENGTH_SHORT).show();
+////        }catch (FileNotFoundException e) {
+////            e.printStackTrace();
+////            Log.e("PDF", "FileNotFound: " +e.getMessage());
+////            Toast.makeText(this,"System Error occured while locating the File",Toast.LENGTH_SHORT).show();
+////        }
+////        catch (Exception e){
+////            e.printStackTrace();
+////            Log.e("PDF", "Execption: "+e.getMessage() );
+////            Toast.makeText(this,"System Error occured",Toast.LENGTH_SHORT).show();
+////        }
+    }
+
+    private void storeTestFile(){
+
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(permissions, WRITE_REQUEST_CODE);
         }
-        catch (Exception e){
-            e.printStackTrace();
-            Log.e("PDF", "Execption: "+e.getMessage() );
-            Toast.makeText(this,"System Error occured",Toast.LENGTH_SHORT).show();
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    //Granted.
+                    File testFile = new File(Environment.getExternalStorageDirectory(),"Abstract.pdf");
+//                    String s = "Andar ka maal dikh raha h ho tera code chal raha h... Aish kar!";
+                    FileOutputStream stream;
+                    try {
+                        stream = new FileOutputStream(testFile);
+                        stream.write(bytesFile);
+                        stream.close();
+                        Toast.makeText(this,"File Generated...",Toast.LENGTH_SHORT).show();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        Log.e("Test", e.getMessage());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.e("Test", e.getMessage());
+                    }
+
+
+                }
+                else{
+                    //Denied.
+                    Toast.makeText(this,"Permission Denied",Toast.LENGTH_LONG).show();
+                }
+                break;
+
         }
     }
 
@@ -262,6 +386,35 @@ public class MainActivity extends AppCompatActivity {
     public void Configure(View view){
         Intent intent = new Intent(this,ConfigureHardware.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode == RESULT_OK && requestCode == REQUEST_IMAGE_CAPTURE  && data != null && data.getData() != null){
+            ImageUri = data.getData();
+            final ProgressDialog dialog = new ProgressDialog(this);
+            dialog.setMessage("Uploading Image...");
+            dialog.setTitle("Please wait");
+            dialog.show();
+
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(user.getUid()+"/"+timestamp.toString());
+            storageReference.putFile(ImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            dialog.dismiss();
+                            Toast.makeText(getApplicationContext(),"Image Uploaded",Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            dialog.dismiss();
+                            Toast.makeText(getApplicationContext(),"Image could not be Uploaded",Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
     }
 
     //when back button is pressed, close the app

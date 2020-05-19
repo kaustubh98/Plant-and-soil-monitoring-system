@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Settings">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settingTextViewLength"
+        android:layout_marginTop="@dimen/SettingTextLeftPadding"
+        android:layout_marginBottom="@dimen/SettingTextLeftPadding"
+        android:text="Add Slave Unit"
+        android:paddingLeft="@dimen/SettingTextLeftPadding"
+        android:textSize="@dimen/settingTextSize" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/common_google_signin_btn_text_dark_focused" />
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settingTextViewLength"
+        android:layout_marginTop="@dimen/SettingTextLeftPadding"
+        android:layout_marginBottom="@dimen/SettingTextLeftPadding"
+        android:text="Change Crop"
+        android:paddingLeft="@dimen/SettingTextLeftPadding"
+        android:textSize="@dimen/settingTextSize" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/common_google_signin_btn_text_dark_focused" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settingTextViewLength"
+        android:layout_marginTop="@dimen/SettingTextLeftPadding"
+        android:layout_marginBottom="@dimen/SettingTextLeftPadding"
+        android:text="Change Language"
+        android:paddingLeft="@dimen/SettingTextLeftPadding"
+        android:textSize="@dimen/settingTextSize" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/common_google_signin_btn_text_dark_focused" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settingTextViewLength"
+        android:layout_marginTop="@dimen/SettingTextLeftPadding"
+        android:layout_marginBottom="@dimen/SettingTextLeftPadding"
+        android:text="Edit Zone Descpription"
+        android:paddingLeft="@dimen/SettingTextLeftPadding"
+        android:textSize="@dimen/settingTextSize" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/common_google_signin_btn_text_dark_focused" />
+</LinearLayout>
