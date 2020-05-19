@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ public class FragmentAverage extends Fragment {
     private static String name;
     private FirebaseUser user;
     private RecyclerView recyclerView;
+    private LinearLayout nullview;
     private static String moisture,humidity,temp,light;
 
     public FragmentAverage() {
@@ -53,6 +55,7 @@ public class FragmentAverage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View root =  inflater.inflate(R.layout.fragment_average, container, false);
         recyclerView = root.findViewById(R.id.recyclerView);
+        nullview = root.findViewById(R.id.NullView);
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference(user.getUid());
         ListenForParameter("Moisture");
@@ -60,14 +63,13 @@ public class FragmentAverage extends Fragment {
         ListenForParameter("LightIntensity");
         ListenForParameter("Temperature");
 
-        //getting number of units and name
+        //getting number of units and name for storing in PDF
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int mUnits = dataSnapshot.child("NumberOfUnits").getValue(Integer.class);
                 units = String.valueOf(mUnits);
                 name = dataSnapshot.child("Name").getValue(String.class);
-                
             }
 
             @Override
@@ -112,6 +114,8 @@ public class FragmentAverage extends Fragment {
                     values.add(2, moisture);
                     values.add(3, light);
                     CardViewAdapter adapter = new CardViewAdapter(values);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    nullview.setVisibility(View.GONE);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 

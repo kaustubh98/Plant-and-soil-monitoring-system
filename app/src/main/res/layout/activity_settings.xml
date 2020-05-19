@@ -22,6 +22,7 @@
         android:layout_marginTop="@dimen/SettingTextLeftPadding"
         android:layout_marginBottom="@dimen/SettingTextLeftPadding"
         android:text="Add Slave Unit"
+        android:onClick="addUnit"
         android:paddingLeft="@dimen/SettingTextLeftPadding"
         android:textSize="@dimen/settingTextSize" />
 

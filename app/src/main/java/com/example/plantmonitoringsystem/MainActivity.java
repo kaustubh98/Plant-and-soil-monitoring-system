@@ -19,7 +19,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,18 +41,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StreamDownloadTask;
 import com.google.firebase.storage.UploadTask;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.codec.Base64;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -65,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout nullView,loadingView;
     private AppBarLayout appBarLayout;
     ArrayList<String> values = new ArrayList<String>();
-    RecyclerView recyclerView;
     int count = 0;
     Uri ImageUri;
     byte[] bytesFile;
@@ -82,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         //prompt to sign in for non registered users
         user = FirebaseAuth.getInstance().getCurrentUser();
-        nullView = findViewById(R.id.NullView);
+        nullView = findViewById(R.id.textView7);
         loadingView = findViewById(R.id.loadingView);
         appBarLayout = findViewById(R.id.appBarLayout);
 
@@ -117,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                             tabLayout.setupWithViewPager(viewPager);
                             appBarLayout.setVisibility(View.VISIBLE);
                             loadingView.setVisibility(View.GONE);
+                            nullView.setVisibility(View.GONE);
 
                         } else {
                             appBarLayout.setVisibility(View.VISIBLE);
@@ -197,146 +191,55 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //add a slave unit to the farm
-    private void addSlave() {
-
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Describe the location of sensor unit");
-
-        //create the edit text
-        final EditText input = new EditText(this);
-        dialog.setView(input);
-
-        dialog.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                reference.child("NumberOfUnits").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String description = input.getText().toString().trim();
-                        int k = dataSnapshot.getValue(Integer.class);
-                        if(count != k){
-                            count = k+1;
-                            reference.child("zone" + count).child("Description").setValue(description);
-                            reference.child("NumberOfUnits").setValue(count);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-            }
-        });
-
-        dialog.setNegativeButton("Cancel",null);
-        dialog.show();
-    }
-
     //share the data as PDF file
     private void sharePDF() {
 
-        //try {
+        try {
 
 
-            StorageReference reference = FirebaseStorage.getInstance().getReference(user.getUid()+"/Abstract.pdf");
-            reference.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-
-                    bytesFile = bytes;
-                    storeTestFile();
-                }
-            });
-
-//            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//            StorageReference reference = FirebaseStorage.getInstance().getReference(user.getUid()+"/Abstract.pdf");
+//            reference.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
 //                @Override
-//                public void onSuccess(Uri uri) {
-//                    File file = new File(uri.getPath());
-//                    Log.e("PDF", "onSuccess: File:"+file.getName());
-//                    Log.e("PDF", "onSuccess: FilePath:"+file.getPath());
-//                    Log.e("PDF", "onSuccess: URI path:"+uri.getPath());
-//                    try {
-//                        InputStream stream = new FileInputStream(file);
-//                        File fileShare = new File(Environment.getExternalStorageDirectory(),"Abstract.pdf");
-//                        OutputStream out = new FileOutputStream(fileShare.getName());
-//                        int c;
-//                        while ((c = stream.read()) != -1) {
-//                            out.write(c);
-//                        }
+//                public void onSuccess(byte[] bytes) {
 //
-//                        if (stream != null) {
-//                            stream.close();
-//                        }
-//                        if (out != null) {
-//                            out.close();
-//                        }
-//
-//                    }catch(FileNotFoundException e){
-//                        e.printStackTrace();
-//                        Log.e("PDF", "Teri file nahi mili... ");
-//                    }catch (IOException e){
-//                        e.printStackTrace();
-//                        Log.e("PDF", "Stream read nahi kar paye ");
-//                    }
-////                    Intent intent = new Intent();
-////                    Uri uriShare = FileProvider.getUriForFile(getApplicationContext(),"com.example.plantmonitoringsystem",file);
-////                    intent.setAction(Intent.ACTION_SEND);
-////                    intent.setType("application/pdf");
-////                    intent.putExtra(Intent.EXTRA_STREAM,uriShare);
-////                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-////                    Log.e("PDF", "Just Opening Intent" );
-////                    startActivity(Intent.createChooser(intent, "Share Farm Details"));
+//                    bytesFile = bytes;
+//                    storeTestFile();
 //                }
 //            });
-//
-//
-////            reference.getStream().addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {
-////                @Override
-////                public void onSuccess(StreamDownloadTask.TaskSnapshot taskSnapshot) {
-//////                    InputStream stream =  taskSnapshot.getStream();
-//////                    Log.e("Stream",stream);
-////
-////                }
-////            });
-//
-////            //create the file
-////            String path = getFilesDir()+"/FarmData.pdf";
-////
-////            CreatePDF pdf = new CreatePDF(path);
-////            File file = pdf.getFile();
-////
-////            //testing of saving file
-////            storeTestFile();
-//
-//            //share the file
-////            Uri uri = FileProvider.getUriForFile(this,"com.example.plantmonitoringsystem",file);
-////            Intent intent = new Intent();
-////            intent.setAction(Intent.ACTION_SEND);
-////            intent.setType("application/pdf");
-////            intent.putExtra(Intent.EXTRA_STREAM,uri);
-////            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-////            Log.e("PDF", "Just Opening Intent" );
-////            startActivity(Intent.createChooser(intent, "Share Farm Details"));
-//            //stream.close();
-//
-////        } catch (DocumentException e) {
-////            e.printStackTrace();
-////            Log.e("PDF", "DocumentExpection: " +e.getMessage());
-////            Toast.makeText(this,"Could not generate the PDF file",Toast.LENGTH_SHORT).show();
-////        }catch (FileNotFoundException e) {
-////            e.printStackTrace();
-////            Log.e("PDF", "FileNotFound: " +e.getMessage());
-////            Toast.makeText(this,"System Error occured while locating the File",Toast.LENGTH_SHORT).show();
-////        }
-////        catch (Exception e){
-////            e.printStackTrace();
-////            Log.e("PDF", "Execption: "+e.getMessage() );
-////            Toast.makeText(this,"System Error occured",Toast.LENGTH_SHORT).show();
-////        }
+
+            //create the file
+            String path = getFilesDir() + "/FarmData.pdf";
+
+            CreatePDF pdf = new CreatePDF(path);
+            File file = pdf.getFile();
+
+            //testing of saving file
+            //storeTestFile();
+
+            //share the file
+            Uri uri = FileProvider.getUriForFile(this, "com.example.plantmonitoringsystem", file);
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("application/pdf");
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Log.e("PDF", "Just Opening Intent");
+            startActivity(Intent.createChooser(intent, "Share Farm Details"));
+            } catch (DocumentException e) {
+            e.printStackTrace();
+            Log.e("PDF", "DocumentExpection: " +e.getMessage());
+            Toast.makeText(this,"Could not generate the PDF file",Toast.LENGTH_SHORT).show();
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.e("PDF", "FileNotFound: " +e.getMessage());
+            Toast.makeText(this,"System Error occured while locating the File",Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            Log.e("PDF", "Execption: "+e.getMessage() );
+            Toast.makeText(this,"System Error occured",Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void storeTestFile(){

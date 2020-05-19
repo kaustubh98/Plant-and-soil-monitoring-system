@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="64dp"
-                android:text="Set up Your Hardware"
+                android:text="Add a sensor Unit"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="30sp" />
 
@@ -44,7 +44,7 @@
                     android:id="@+id/device_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter ID of your main device" />
+                    android:hint="Enter the ID of the Sensor unit" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -56,7 +56,7 @@
                     android:id="@+id/description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Describe where the sensor unit will be placed"/>
+                    android:hint="Add description about unit's location"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorAccent"
                 android:textColor="#FFFFFF"
-                android:text="Configure Hardware"
+                android:text="Add unit"
                 android:onClick="configure"
                 android:textSize="14sp" />
 

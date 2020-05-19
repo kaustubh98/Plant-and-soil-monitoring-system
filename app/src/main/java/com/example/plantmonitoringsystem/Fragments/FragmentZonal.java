@@ -1,5 +1,6 @@
 package com.example.plantmonitoringsystem.Fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.plantmonitoringsystem.R;
 import com.example.plantmonitoringsystem.SupportClasses.CardViewAdapter;
@@ -44,6 +46,7 @@ public class FragmentZonal extends Fragment {
     private DatabaseReference reference;
     private FirebaseUser user;
     private RecyclerView recyclerView;
+    private LinearLayout nullView;
     private String moisture;
     private String humidity;
     private String temperature;
@@ -60,6 +63,8 @@ public class FragmentZonal extends Fragment {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_zonal, container, false);
         recyclerView = root.findViewById(R.id.recyclerView_zones);
+        nullView = root.findViewById(R.id.NullViewZonal);
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference(user.getUid()+"/Zones");
 
@@ -96,11 +101,17 @@ public class FragmentZonal extends Fragment {
                 }
 
                 Log.e(TAG, "onChildAdded: " + humidity);
-                Tlist.add(Float.valueOf(temperature));
-                Hlist.add(Float.valueOf(humidity));
-                Llist.add(Float.valueOf(Light));
-                Mlist.add(Float.valueOf(moisture));
-                desList.add(dataSnapshot.child("Description").getValue(String.class));
+
+                if(temperature!=null && humidity!=null && moisture!=null && Light!=null ) {
+                    Tlist.add(0,Float.valueOf(temperature));
+                    Hlist.add(0,Float.valueOf(humidity));
+                    Llist.add(0,Float.valueOf(Light));
+                    Mlist.add(0,Float.valueOf(moisture));
+                    desList.add(0,dataSnapshot.child("Description").getValue(String.class));
+
+                    nullView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
 
                 //load the recycler view
                 ZoneDisplayAdapter adapter = new ZoneDisplayAdapter(Tlist, Hlist, Mlist, Llist, desList);

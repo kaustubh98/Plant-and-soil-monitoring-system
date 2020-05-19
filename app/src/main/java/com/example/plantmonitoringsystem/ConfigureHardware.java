@@ -37,7 +37,7 @@ public class ConfigureHardware extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("Configure Hardware");
+        actionBar.setTitle("Add Hardware unit");
 
         e_des = findViewById(R.id.description);
         e_id = findViewById(R.id.device_id);
@@ -59,7 +59,7 @@ public class ConfigureHardware extends AppCompatActivity {
                     try {
                         int temp = dataSnapshot.getValue(Integer.class);
                         //registering user and device IDs
-                        reference.child(user.getUid()).child("Device").setValue(id);
+                        reference.child(user.getUid()).child("Device").push().setValue(id);
                         reference.child("Devices").child(id).setValue(user.getUid());
 
                         //adding slave unit
@@ -67,6 +67,9 @@ public class ConfigureHardware extends AppCompatActivity {
                             count = temp+1;
                             reference.child(user.getUid()).child("Zones/zone" + count).child("Description").setValue(des);
                             reference.child(user.getUid() + "/NumberOfUnits").setValue(count);
+                            Toast.makeText(getApplicationContext(),"Hardware unit added successfully",Toast.LENGTH_LONG).show();
+                            Intent i = new Intent(ConfigureHardware.this,MainActivity.class);
+                            startActivity(i);
                         }
 
                     }catch (NullPointerException ne){
