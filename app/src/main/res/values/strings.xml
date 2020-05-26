@@ -2,6 +2,15 @@
     <string name="app_name" translatable="false">My Farm</string>
     <string name="title_activity_test">test</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Temperature">Temperature</string>
+    <string name="Humidity">Humidity</string>
+    <string name="Moisture">Soil Moisture</string>
+    <string name="LightIntensity">Light Intensity</string>
+
+    <string name="average">Average</string>
+    <string name="zones">Zones</string>
+
+    <string name="addUnit" translatable="false">Add Unit</string>
+    <string name="loactionDescription">Add description about unit\'s location</string>
+
 </resources>

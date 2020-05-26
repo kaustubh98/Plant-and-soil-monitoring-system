@@ -76,7 +76,6 @@ public class ParameterList extends AppCompatActivity {
                     //plot the grpaph
                     entries.add(new Entry(mTimeStamp,Float.valueOf(value)));
                     LineDataSet dataSet = new LineDataSet(entries,parameter+" Variation");
-                    dataSet.setColor(R.color.colorPrimary);
                     LineData lineData = new LineData(dataSet);
                     chart.setData(lineData);
                     chart.invalidate();

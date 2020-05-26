@@ -1,5 +1,7 @@
 package com.example.plantmonitoringsystem.SupportClasses;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.plantmonitoringsystem.MainActivity;
 import com.example.plantmonitoringsystem.R;
 
 import java.util.ArrayList;
@@ -16,9 +19,15 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+//import static androidx.core.graphics.drawable.IconCompat.getResources;
+
+
 public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHolder> {
 
-    private String[] parameter = {"Temperature","Humidity","Soil Moisture","Light Intensity"};
+
+    //private String temp = Context.getString(R.string.Temperature);
+
+    private String[] parameter = {"तापमान","नमी","मिटटी की नमी","प्रकाश की तीव्रता"};
     private ArrayList<String> value;
     private int[] icon = {R.drawable.temperature_icon,R.drawable.humidity,R.drawable.soilmoistureicon,R.drawable.lightintensityicon};
     private Listener listener;

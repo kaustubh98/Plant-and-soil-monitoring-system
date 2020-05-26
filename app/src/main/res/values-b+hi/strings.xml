@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name" translatable="false">My Farm</string>
+    <string name="title_activity_test">test</string>
+
+    <string name="Temperature">तापमान</string>
+    <string name="Humidity">नमी</string>
+    <string name="Moisture">मिटटी की नमी</string>
+    <string name="LightIntensity">प्रकाश की तीव्रता</string>
+
+    <string name="average">औसत</string>
+    <string name="zones">जोन</string>
+
+</resources>

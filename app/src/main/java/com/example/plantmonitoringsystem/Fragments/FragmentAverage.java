@@ -1,5 +1,6 @@
 package com.example.plantmonitoringsystem.Fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -45,6 +46,7 @@ public class FragmentAverage extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayout nullview;
     private static String moisture,humidity,temp,light;
+    private ProgressDialog progressDialog;
 
     public FragmentAverage() {
         // Required empty public constructor
@@ -58,6 +60,7 @@ public class FragmentAverage extends Fragment {
         nullview = root.findViewById(R.id.NullView);
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference(user.getUid());
+
         ListenForParameter("Moisture");
         ListenForParameter("Humidity");
         ListenForParameter("LightIntensity");
@@ -118,6 +121,8 @@ public class FragmentAverage extends Fragment {
                     nullview.setVisibility(View.GONE);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
+                    progressDialog.dismiss();
 
                     //for handling click events
                     adapter.setListener(new CardViewAdapter.Listener() {

@@ -1,8 +1,11 @@
 package com.example.plantmonitoringsystem.SupportClasses;
 
+import android.content.Context;
+
 import com.example.plantmonitoringsystem.Fragments.FragmentAverage;
 import com.example.plantmonitoringsystem.Fragments.FragmentDisease;
 import com.example.plantmonitoringsystem.Fragments.FragmentZonal;
+import com.example.plantmonitoringsystem.R;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;

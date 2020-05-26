@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.plantmonitoringsystem.R;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,15 +42,19 @@ public class ParameterListAdapter extends ArrayAdapter {
 
         TextView textView = listView.findViewById(R.id.value);
         TextView timeView = listView.findViewById(R.id.time);
+        TextView dateView = listView.findViewById(R.id.dateView);
         String parameter = (String) getItem(position);
         textView.setText(parameter);
 
-        //get the time
+        //get the time and date
         SimpleDateFormat format = new SimpleDateFormat("h:mm a");
         String time = format.format(new Date(timeStamp.get(position)));
+        DateFormat dateFormat = new SimpleDateFormat("MMM dd,yyyy");
+        String date = dateFormat.format(new Date(timeStamp.get(position)));
 
         //String timeStamp = "Past Record";
         timeView.setText(time);
+        dateView.setText(date);
 
         return listView;
     }
