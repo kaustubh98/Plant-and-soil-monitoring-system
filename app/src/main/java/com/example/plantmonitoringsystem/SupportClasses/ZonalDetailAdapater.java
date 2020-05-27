@@ -1,9 +1,12 @@
 package com.example.plantmonitoringsystem.SupportClasses;
 
+import android.content.Context;
+
 import com.example.plantmonitoringsystem.Fragments.FragmentHumidity;
 import com.example.plantmonitoringsystem.Fragments.FragmentLight;
 import com.example.plantmonitoringsystem.Fragments.FragmentMoisture;
 import com.example.plantmonitoringsystem.Fragments.FragmentTemperature;
+import com.example.plantmonitoringsystem.R;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -13,10 +16,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 public class ZonalDetailAdapater extends FragmentPagerAdapter {
 
     String Zone;
+    Context context;
 
-    public ZonalDetailAdapater(FragmentManager fm, String zone) {
+    public ZonalDetailAdapater(FragmentManager fm,Context context, String zone) {
         super(fm);
         Zone = zone;
+        this.context = context;
     }
 
     @Override
@@ -46,13 +51,13 @@ public class ZonalDetailAdapater extends FragmentPagerAdapter {
 
         switch (position){
             case 0:
-                return "Temperature";
+                return context.getResources().getString(R.string.Temperature);
             case 1:
-                return "Humidity";
+                return context.getResources().getString(R.string.Humidity);
             case 2:
-                return "Soil Moisture";
+                return context.getResources().getString(R.string.Moisture);
             case 3:
-                return "Light Intensity";
+                return context.getResources().getString(R.string.LightIntensity);
         }
 
         return null;

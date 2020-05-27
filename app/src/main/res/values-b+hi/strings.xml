@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">My Farm</string>
-    <string name="title_activity_test">test</string>
 
     <string name="Temperature">तापमान</string>
     <string name="Humidity">नमी</string>
@@ -9,5 +8,17 @@
 
     <string name="average">औसत</string>
     <string name="zones">जोन</string>
+
+    <string name="addUnit">हार्डवेयर इकाई जोड़ें</string>
+    <string name="loactionDescription">Add description about unit\'s location</string>
+
+    <string name="chooseLanguge">भाषा चुनें</string>
+    <string name="settings">सेटिंग</string>
+
+    <string name="shareData">फार्म डेटा साझा करें</string>
+    <string name="SignOut">सिग्न आउट</string>
+
+    <string name="changeLanguage">भाषा बदलो</string>
+    <string name="zoneDescription">क्षेत्र विवरण संपादित करें</string>
 
 </resources>

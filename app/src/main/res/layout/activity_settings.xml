@@ -21,7 +21,7 @@
         android:layout_height="@dimen/settingTextViewLength"
         android:layout_marginTop="@dimen/SettingTextLeftPadding"
         android:layout_marginBottom="@dimen/SettingTextLeftPadding"
-        android:text="Add Slave Unit"
+        android:text="@string/addUnit"
         android:onClick="addUnit"
         android:paddingLeft="@dimen/SettingTextLeftPadding"
         android:textSize="@dimen/settingTextSize" />
@@ -48,13 +48,14 @@
         android:background="@color/common_google_signin_btn_text_dark_focused" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/changeLanguage"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settingTextViewLength"
         android:layout_marginTop="@dimen/SettingTextLeftPadding"
         android:layout_marginBottom="@dimen/SettingTextLeftPadding"
-        android:text="Change Language"
+        android:text="@string/changeLanguage"
         android:paddingLeft="@dimen/SettingTextLeftPadding"
+        android:onClick="changeLanguage"
         android:textSize="@dimen/settingTextSize" />
 
     <View
@@ -69,7 +70,7 @@
         android:layout_height="@dimen/settingTextViewLength"
         android:layout_marginTop="@dimen/SettingTextLeftPadding"
         android:layout_marginBottom="@dimen/SettingTextLeftPadding"
-        android:text="Edit Zone Descpription"
+        android:text="@string/zoneDescription"
         android:paddingLeft="@dimen/SettingTextLeftPadding"
         android:textSize="@dimen/settingTextSize" />
 

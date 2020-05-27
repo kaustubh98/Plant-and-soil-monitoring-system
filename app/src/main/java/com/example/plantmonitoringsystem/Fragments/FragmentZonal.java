@@ -42,6 +42,7 @@ public class FragmentZonal extends Fragment {
     private ArrayList<Float> Tlist = new ArrayList<Float>();
     private ArrayList<Float> Hlist = new ArrayList<Float>();
     private ArrayList<Float> Mlist = new ArrayList<Float>();
+    private ArrayList<String>ZoneID = new ArrayList<>();
     private ArrayList<String> desList = new ArrayList<String>();
     private DatabaseReference reference;
     private FirebaseUser user;
@@ -84,6 +85,9 @@ public class FragmentZonal extends Fragment {
                 DataSnapshot light = dataSnapshot.child("LightIntensity");
                 DataSnapshot moitst = dataSnapshot.child("Moisture");
 
+                ZoneID.add(0,dataSnapshot.getKey());
+                Log.e("Key", dataSnapshot.getKey() );
+
                 for (DataSnapshot child : humid.getChildren()) {
                     humidity = child.getValue(String.class).split("_")[0];
                 }
@@ -124,7 +128,7 @@ public class FragmentZonal extends Fragment {
                         Intent intent = new Intent(getContext(), ZonalDetails.class);
                         intent.putExtra("Title",desList.get(position));
                         int temp = position+1;
-                        intent.putExtra("ZoneID","zone"+temp);
+                        intent.putExtra("ZoneID",ZoneID.get(position));
                         startActivity(intent);
                     }
                 });

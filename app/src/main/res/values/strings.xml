@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">My Farm</string>
-    <string name="title_activity_test">test</string>
 
     <string name="Temperature">Temperature</string>
     <string name="Humidity">Humidity</string>
@@ -10,7 +9,16 @@
     <string name="average">Average</string>
     <string name="zones">Zones</string>
 
-    <string name="addUnit" translatable="false">Add Unit</string>
+    <string name="addUnit">Add Unit</string>
     <string name="loactionDescription">Add description about unit\'s location</string>
+
+    <string name="chooseLanguge">Choose Language</string>
+    <string name="settings">Settings</string>
+
+    <string name="shareData">Share Farm Data</string>
+    <string name="SignOut">Sign Out</string>
+
+    <string name="changeLanguage">Change Language</string>
+    <string name="zoneDescription">Edit Zone Description</string>
 
 </resources>

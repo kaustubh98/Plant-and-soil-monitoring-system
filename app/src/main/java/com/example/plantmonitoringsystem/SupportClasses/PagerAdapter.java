@@ -14,8 +14,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
-    public PagerAdapter(FragmentManager fm) {
+    Context context;
+
+    public PagerAdapter(FragmentManager fm, Context context) {
+
         super(fm);
+        this.context = context;
     }
 
     @Override
@@ -41,9 +45,9 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
         switch (position){
             case 0:
-                return "Average";
+                return context.getResources().getString(R.string.average);
             case 1:
-                return "Zones";
+                return context.getResources().getString(R.string.zones);
         }
 
         return null;

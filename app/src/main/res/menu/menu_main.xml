@@ -3,14 +3,14 @@
 
     <item
         android:id="@+id/sendData"
-        android:title="Share Farm Data" />
+        android:title="@string/shareData" />
     <item
         android:id="@+id/FarmImage"
         android:title="Share Farm Images" />
     <item
         android:id="@+id/setting"
-        android:title="Settings" />
+        android:title="@string/settings" />
     <item
         android:id="@+id/signOut"
-        android:title="Sign Out" />
+        android:title="@string/SignOut" />
 </menu>

@@ -46,7 +46,6 @@ public class FragmentAverage extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayout nullview;
     private static String moisture,humidity,temp,light;
-    private ProgressDialog progressDialog;
 
     public FragmentAverage() {
         // Required empty public constructor
@@ -116,18 +115,17 @@ public class FragmentAverage extends Fragment {
                     values.add(1, humidity);
                     values.add(2, moisture);
                     values.add(3, light);
-                    CardViewAdapter adapter = new CardViewAdapter(values);
+                    CardViewAdapter adapter = new CardViewAdapter(getContext(),values);
                     recyclerView.setVisibility(View.VISIBLE);
                     nullview.setVisibility(View.GONE);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-                    progressDialog.dismiss();
-
                     //for handling click events
                     adapter.setListener(new CardViewAdapter.Listener() {
                         @Override
                         public void onClick(int position) {
+
                             switch (position) {
                                 case 0:
                                     i.putExtra("Parameter", "Temperature");

@@ -1,6 +1,5 @@
 package com.example.plantmonitoringsystem.SupportClasses;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -9,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.plantmonitoringsystem.MainActivity;
 import com.example.plantmonitoringsystem.R;
 
 import java.util.ArrayList;
@@ -19,15 +17,12 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-//import static androidx.core.graphics.drawable.IconCompat.getResources;
-
-
 public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHolder> {
 
 
     //private String temp = Context.getString(R.string.Temperature);
 
-    private String[] parameter = {"तापमान","नमी","मिटटी की नमी","प्रकाश की तीव्रता"};
+    private ArrayList<String> parameter = new ArrayList<>();
     private ArrayList<String> value;
     private int[] icon = {R.drawable.temperature_icon,R.drawable.humidity,R.drawable.soilmoistureicon,R.drawable.lightintensityicon};
     private Listener listener;
@@ -37,8 +32,13 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
         void onClick(int position);
     }
 
-    public CardViewAdapter(ArrayList<String> value) {
+    public CardViewAdapter(Context context,ArrayList<String> value) {
+
         this.value = value;
+        parameter.add(context.getResources().getString(R.string.Temperature));
+        parameter.add(context.getResources().getString(R.string.Humidity));
+        parameter.add(context.getResources().getString(R.string.Moisture));
+        parameter.add(context.getResources().getString(R.string.LightIntensity));
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -77,7 +77,7 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
 
         //set the parameter name
         TextView textView = cardView.findViewById(R.id.parameter);
-        textView.setText(parameter[position]);
+        textView.setText(parameter.get(position));
 
         //set the value
         TextView textView2 = cardView.findViewById(R.id.parametervalue);

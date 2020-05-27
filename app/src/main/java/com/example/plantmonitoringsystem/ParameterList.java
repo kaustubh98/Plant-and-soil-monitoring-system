@@ -111,16 +111,16 @@ public class ParameterList extends AppCompatActivity {
 
             switch (parameter){
                 case "Temperature":
-                    actionBar.setTitle("Temperature");
+                    actionBar.setTitle(R.string.Temperature);
                     break;
                 case "Humidity":
-                    actionBar.setTitle("Humidity");
+                    actionBar.setTitle(R.string.Humidity);
                     break;
                 case "Moisture":
-                    actionBar.setTitle("Soil Moisture Level");
+                    actionBar.setTitle(R.string.Moisture);
                     break;
                 case "LightIntensity":
-                    actionBar.setTitle("Light Intensity");
+                    actionBar.setTitle(R.string.LightIntensity);
                     break;
 
             }

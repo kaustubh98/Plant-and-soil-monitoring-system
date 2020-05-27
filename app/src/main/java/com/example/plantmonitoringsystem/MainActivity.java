@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
                     try {
                         if (dataSnapshot.getValue(Integer.class) != 0) {
-                            PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
+                            PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(),getBaseContext());
                             ViewPager viewPager = findViewById(R.id.view_pager);
                             viewPager.setAdapter(adapter);
                             TabLayout tabLayout = findViewById(R.id.tabs);

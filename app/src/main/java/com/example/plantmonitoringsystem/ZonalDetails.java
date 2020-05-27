@@ -36,7 +36,7 @@ public class ZonalDetails extends AppCompatActivity {
         }
 
         //set up the fragments
-        ZonalDetailAdapater adapter = new ZonalDetailAdapater(getSupportFragmentManager(),zoneID);
+        ZonalDetailAdapater adapter = new ZonalDetailAdapater(getSupportFragmentManager(),getBaseContext(),zoneID);
         ViewPager viewPager = findViewById(R.id.view_pager_Zonal);
         TabLayout tabLayout = findViewById(R.id.tabsZonal);
         viewPager.setAdapter(adapter);

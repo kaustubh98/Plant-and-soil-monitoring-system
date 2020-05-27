@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Farm</string>
+
+    <string name="Temperature">તાપમાન</string>
+    <string name="Humidity">ભેજ</string>
+    <string name="Moisture">જમીનની ભેજ</string>
+    <string name="LightIntensity">પ્રકાશ તીવ્રતા</string>
+
+    <string name="average">સરેરાશ</string>
+    <string name="zones">ઝોન</string>
+
+    <string name="addUnit">હાર્ડવેર એકમ ઉમેરો</string>
+    <string name="loactionDescription">એકમના સ્થાન વિશે વર્ણન ઉમેરો</string>
+
+    <string name="chooseLanguge">ભાષા પસંદ કરો</string>
+    <string name="settings">સેટિંગ્સ</string>
+
+    <string name="shareData">શેર ફાર્મ ડેટા</string>
+    <string name="SignOut">સાઇન આઉટ</string>
+
+    <string name="changeLanguage">ભાષા બદલો</string>
+    <string name="zoneDescription">ફેરફાર કરો ઝોન વર્ણન</string>
+
+</resources>
